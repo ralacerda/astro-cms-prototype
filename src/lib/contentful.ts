@@ -27,6 +27,7 @@ class Client {
   getNovidades() {
     const novidades = Util.findAllFromId(this.dados, "novidades");
     console.log("Acessando contato");
+
     return novidades.map((item) => item.fields);
   }
 }
