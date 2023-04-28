@@ -1,19 +1,18 @@
 ---
-import { client } from "../lib/contentful"
+import { client } from "../lib/contentful";
 
-const { titulo } = client.useConfig()
-
+const { titulo } = client.useConfig();
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{titulo}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{titulo}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>
