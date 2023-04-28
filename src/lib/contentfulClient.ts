@@ -19,6 +19,13 @@ export const client = contentful.createClient({
 });
 
 export async function getEntries() {
+  if (import.meta.env.DEV) {
+    return getEntriesWithCache();
+  }
+  return await client.getEntries({});
+}
+
+export async function getEntriesWithCache() {
   const cacheFolder = ".cache";
   const cacheName = "entries.json";
   const cacheFile = path.join(cacheFolder, cacheName);
