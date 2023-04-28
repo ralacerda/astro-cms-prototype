@@ -1,4 +1,6 @@
 import contentful from "contentful";
+import fs from "node:fs";
+import path from "node:path";
 
 if (!import.meta.env.CONTENTFUL_SPACE_ID) {
   throw new Error("Missing Contentful space id");
@@ -16,8 +18,27 @@ export const client = contentful.createClient({
   accessToken: access_token,
 });
 
-export const getEntries = async () => {
-  console.log("Fazendo a Query");
-  const query = await client.getEntries({});
-  return query;
-};
+export async function getEntries() {
+  const cacheFolder = ".cache";
+  const cacheName = "entries.json";
+  const cacheFile = path.join(cacheFolder, cacheName);
+
+  if (!fs.existsSync(cacheFolder)) {
+    fs.mkdirSync(cacheFolder, { recursive: true });
+  }
+
+  // Check if "caching" file exists
+  if (fs.existsSync(cacheFile)) {
+    console.log("Using local cache");
+    // Read data from file
+    const raw = fs.readFileSync(cacheFile);
+    return JSON.parse(raw.toString());
+  } else {
+    console.log("Cache not found, making API call");
+    // Make API call and write to file
+    const response = await client.getEntries({});
+    // Write projects to "caching" file
+    fs.writeFileSync(cacheFile, JSON.stringify(response));
+    return response;
+  }
+}
